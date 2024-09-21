@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Logged Out{% endblock %}
+
+{% block content %}
+<div class="logout-message">
+    <h1>Logged out successfully!</h1>
+    <p>You will be redirected to the login page in <span id="countdown">3</span> seconds...</p>
+</div>
+
+<script>
+    // JavaScript for countdown timer
+    let countdownElement = document.getElementById("countdown");
+    let countdown = 3;
+
+    let timer = setInterval(function() {
+        countdown--;
+        countdownElement.textContent = countdown;
+
+        if (countdown <= 0) {
+            clearInterval(timer);
+            window.location.href = "{{ url_for('login') }}"; // Redirect to login page
+        }
+    }, 1000); // Decrease by 1 every 1000ms (1 second)
+</script>
+{% endblock %}

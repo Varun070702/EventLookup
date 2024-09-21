@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h1>Welcome, Admin</h1>
+
+<h2>Pending Events for Approval</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Event Name</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in pending_events %}
+        <tr>
+            <td>{{ event['name'] }}</td>
+            <td>{{ event['date'] }}</td>
+            <td>{{ event['location'] }}</td>
+            <td>
+                <form action="{{ url_for('admin_approve_reject', event_id=event['id'], action='approve') }}" method="POST" style="display:inline;">
+                    <button type="submit">Approve</button>
+                </form>
+                <form action="{{ url_for('admin_approve_reject', event_id=event['id'], action='reject') }}" method="POST" style="display:inline;">
+                    <button type="submit">Reject</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

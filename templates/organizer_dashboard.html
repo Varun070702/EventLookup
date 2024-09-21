@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Organizer Dashboard{% endblock %}
+
+{% block content %}
+<h1>Welcome, Organizer</h1>
+<div class="event-creation">
+    <h2>Create New Event</h2>
+    <form action="{{ url_for('organizer_dashboard') }}" method="POST" enctype="multipart/form-data">
+        <label for="event-name">Event Name:</label>
+        <input type="text" id="event-name" name="event-name" required>
+        <br>
+        
+        <label for="event-date">Event Date:</label>
+        <input type="date" id="event-date" name="event-date" required>
+        <br>
+
+        <label for="event-price">Event Price:</label>
+        <input type="number" id="event-price" name="event-price" required>
+        <br>
+        
+        <label for="event-description">Event Description:</label>
+        <textarea id="event-description" name="event-description" rows="4" required></textarea>
+        <br>
+
+        <label for="event-location">Event Location:</label>
+        <input type="text" id="event-location" name="event-location" required>
+        <br>
+
+        <label for="event-image">Upload Event Image:</label>
+        <input type="file" id="event-image" name="event-image" accept="image/*" required>
+        <br>
+
+        <label for="event-keywords">Keywords:</label>
+        <input type="text" id="event-keywords" name="event-keywords" placeholder="Comma-separated keywords" required>
+        <br>
+
+        <label for="event-group">Who can attend:</label>
+        <select id="event-group" name="event-group" required>
+            <option value="anyone">Anyone</option>
+            <option value="university">Specific University</option>
+        </select>
+        <br>
+
+        <label for="university-name">University (if applicable):</label>
+        <input type="text" id="university-name" name="university-name" placeholder="University Name">
+        <br>
+
+        <label for="free-food">Will Free Food Be Served?</label>
+        <select id="free-food" name="free-food" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+        <br>
+
+        <button type="submit">Create Event</button>
+    </form>
+
+    <!-- Flash message for submission success or failure -->
+    {% for message in get_flashed_messages() %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</div>
+
+<!-- Section to show submitted events and their approval status -->
+<div class="submitted-events">
+    <h2>Your Submitted Events</h2>
+    <table>
+        <tr>
+            <th>Event Name</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+        {% for event in submitted_events %}
+        <tr>
+            <td>{{ event['name'] }}</td>
+            <td>{{ event['date'] }}</td>
+            <td>{{ event['status'] }}</td> <!-- Show 'pending', 'approved', or 'rejected' -->
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

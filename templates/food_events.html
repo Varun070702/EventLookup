@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Free Food Events{% endblock %}
+
+{% block content %}
+<h1>Free Food Events</h1>
+
+<!-- Filter Form for Free Food Events -->
+<form method="GET" action="{{ url_for('food_events') }}">
+    <label for="location">Location:</label>
+    <input type="text" id="location" name="location" placeholder="Enter location">
+
+    <label for="event-date">Select a Date:</label>
+    <input type="date" id="event-date" name="event-date">
+    
+    <button type="submit">Filter</button>
+</form>
+
+<!-- Display Free Food Events Grouped by Date -->
+<div class="event-grid">
+    {% if events_on_selected_date %}
+        <h2>Events on {{ selected_date }}</h2>
+        {% for event in events_on_selected_date %}
+        <div class="event-card">
+            <h3>{{ event['name'] }}</h3>
+            <p><strong>Date:</strong> {{ event['date'] }}</p>
+            <p><strong>Location:</strong> {{ event['location'] }}</p>
+            <p><strong>Description:</strong> {{ event['description'] }}</p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No events found for the selected date.</p>
+    {% endif %}
+</div>
+{% endblock %}

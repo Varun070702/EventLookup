@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<h1>Available Events</h1>
+
+<!-- Filter Form -->
+<form method="GET" action="{{ url_for('student_dashboard') }}">
+    <label for="price">Max Price:</label>
+    <input type="number" id="price" name="price" placeholder="Enter maximum price">
+
+    <label for="keywords">Area of Interest (Keywords):</label>
+    <input type="text" id="keywords" name="keywords" placeholder="Enter keywords (comma-separated)">
+
+    <label for="date-range">Date Range:</label>
+    <select id="date-range" name="date-range">
+        <option value="">-- Select --</option>
+        <option value="next-week">Next Week</option>
+        <option value="next-month">Next Month</option>
+        <option value="today">Today</option>
+        <option value="upcoming-weekend">Upcoming Weekend</option>
+    </select>
+
+    <label for="location">Location:</label>
+    <input type="text" id="location" name="location" placeholder="Enter location">
+
+    <label for="group">Group Restrictions:</label>
+    <select id="group" name="group">
+        <option value="">-- Select --</option>
+        <option value="anyone">Anyone</option>
+        <option value="university">University-specific</option>
+    </select>
+
+    <label for="free-food">Free Food:</label>
+    <select id="free-food" name="free-food">
+        <option value="">-- Select --</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+    </select>
+
+    <button type="submit">Filter</button>
+</form>
+
+<div class="event-grid">
+    {% for event in events %}
+    <div class="event-card">
+        <img src="{{ url_for('static', filename=event['image_url'].split('static/', 1)[1]) }}" alt="{{ event['name'] }}" width="200px" height="150px">
+        <h3>{{ event['name'] }}</h3>
+        <p><strong>Date:</strong> {{ event['date'] }}</p>
+        <p><strong>Price:</strong> ${{ event['price'] }}</p>
+        <p><strong>Description:</strong> {{ event['description'] }}</p>
+        <p><strong>Location:</strong> {{ event['location'] }}</p>
+        <p><strong>Who can attend:</strong> 
+            {% if event['group_restriction'] == 'university' %}
+                Only students from {{ event['university'] }}
+            {% else %}
+                Anyone can attend
+            {% endif %}
+        </p>
+        <p><strong>Keywords:</strong> {{ event['keywords'] }}</p>
+        <p><strong>Free Food:</strong> {{ event['free_food'] | capitalize }}</p>
+
+        <!-- Registration Form -->
+        <form action="{{ url_for('register_event', event_id=event['id']) }}" method="GET">
+            <button type="submit">Register</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Flash messages for registration success or failure -->
+{% for message in get_flashed_messages() %}
+<p style="color: green;">{{ message }}</p>
+{% endfor %}
+
+{% endblock %}
